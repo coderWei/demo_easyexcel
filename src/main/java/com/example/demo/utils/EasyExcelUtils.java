@@ -21,7 +21,6 @@ import com.alibaba.excel.write.metadata.holder.WriteSheetHolder;
 import com.alibaba.excel.write.metadata.style.WriteCellStyle;
 import com.alibaba.excel.write.style.HorizontalCellStyleStrategy;
 import com.alibaba.excel.write.style.column.AbstractColumnWidthStyleStrategy;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.poi.ss.usermodel.BorderStyle;
@@ -30,6 +29,7 @@ import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -314,7 +314,7 @@ public class EasyExcelUtils {
         response.setContentType("application/vnd.ms-excel");
         response.setCharacterEncoding("UTF-8");
         // 这里URLEncoder.encode可以防止中文乱码 和easyexcel本身没有关系
-        fileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8);
+        fileName = URLEncoder.encode(fileName, String.valueOf(StandardCharsets.UTF_8));
         response.setHeader("Content-disposition", "attachment;filename=" + fileName);
 
         //处理注解转换
@@ -364,7 +364,7 @@ public class EasyExcelUtils {
             for (int j = rowValues.size(); j < title.size() - 2; j++) {
                 rowValues.add(StringUtils.EMPTY); // 补上空白列
             }
-            rowValues.add(io.micrometer.common.util.StringUtils.isNotEmpty(errMap.get(i)) ? "失败" : (errMap.size() == 0 ? "成功" : "未执行")); // 导入结果
+            rowValues.add(ObjectUtil.isNotEmpty(errMap.get(i)) ? "失败" : (errMap.size() == 0 ? "成功" : "未执行")); // 导入结果
             rowValues.add(errMap.get(i)); // 失败原因
             msgList.add(rowValues);
         }

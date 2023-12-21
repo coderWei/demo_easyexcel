@@ -6,18 +6,17 @@ import com.alibaba.excel.write.metadata.WriteSheet;
 import com.example.demo.bean.SheetOneVO;
 import com.example.demo.bean.TemplateOneVO;
 import com.example.demo.handler.XdxCellWriteHandler;
-import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.codec.CharEncoding;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-import static java.util.List.of;
 
 @RestController
 @RequestMapping("/one")
@@ -43,7 +42,7 @@ public class OneController {
     public void one(HttpServletResponse response) throws Exception {
 
         // 通用内容设置
-        String fileName = URLEncoder.encode("templateOne.xlsx", StandardCharsets.UTF_8);
+        String fileName = URLEncoder.encode("templateOne.xlsx", String.valueOf(StandardCharsets.UTF_8));
         response.setContentType("application/octet-stream");
         response.setCharacterEncoding(CharEncoding.UTF_8);
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + fileName);
@@ -65,7 +64,7 @@ public class OneController {
                 .build();
 
 
-        excelWriter.write(of(new TemplateOneVO("张三", "美国", "胡佛")), writeSheet)
+        excelWriter.write(Collections.singletonList(new TemplateOneVO("张三", "美国", "胡佛")), writeSheet)
                 .write(cityEntityList, citySheet)
                 .finish();
     }

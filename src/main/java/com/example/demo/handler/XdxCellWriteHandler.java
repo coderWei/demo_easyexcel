@@ -45,7 +45,7 @@ public class XdxCellWriteHandler implements CellWriteHandler {
         DataValidationConstraint constraint;
         if (dropDownData.get(key).size() < LIMIT) {
             // 直接设置下拉选
-            constraint = helper.createExplicitListConstraint(dropDownData.get(key).toArray(String[]::new));
+            constraint = helper.createExplicitListConstraint(dropDownData.get(key).toArray(new String[0]));
 
         } else {
             // 联动到另外一个 sheet
